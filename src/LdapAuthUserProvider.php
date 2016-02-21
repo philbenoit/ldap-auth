@@ -7,6 +7,8 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class LdapAuthUserProvider implements UserProvider
 {
+
+
     /**
      * LDAP Object
      *

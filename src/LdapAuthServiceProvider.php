@@ -24,13 +24,20 @@ class LdapAuthServiceProvider extends ServiceProvider
     {
         // Register 'ldap' as authentication method
         Auth::provider('ldap', function($app){
+
+            $options = $this->getLdapConfig();
+
             // Create new LDAP connection based on configuration files
-            $ldap = new Ldap( $this->getLdapConfig() );
+            $ldap = new Ldap( $options );
 
             return new LdapAuthUserProvider(
                 $ldap, $app['config']['auth']['providers']['ldap-users']['model']
             );
         });
+
+        $this->publishes([
+            __DIR__.'/Config/ldap.php' => config_path('ldap.php'),
+        ]);
     }
 
     /**

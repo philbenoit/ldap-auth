@@ -48,14 +48,14 @@ class Ldap {
      *
      * @var array
      */
-    protected $fields = ['samaccountname', 'displayname', 'memberof'];
+    protected $fields;
 
     /**
      * Default filter to execute a search query on
      *
      * @var string
      */
-    private $search_filter = "sAMAccountName";
+    private $search_filter;
 
     /**
      * Tries to connect and bind to the LDAP
@@ -66,6 +66,10 @@ class Ldap {
      */
     public function __construct($options)
     {
+
+        $this->fields = $options['fields'];
+        $this->search_filter = $options['search_filter'];
+
         $config = $this->bindConfig($options);
 
         // Build Common Name from Config file and append to base DN
@@ -87,7 +91,7 @@ class Ldap {
     {
         $this->ldap->connect();
 
-        $this->ldap->option(LDAP_OPT_PROTOCOL_VERSION, $connection::PROTOCOL);
+        $this->ldap->option(LDAP_OPT_PROTOCOL_VERSION, $connection::VERSION);
         $this->ldap->option(LDAP_OPT_REFERRALS, $connection::REFERRALS);
         $this->ldap->option(LDAP_OPT_TIMELIMIT, $connection::TIMELIMIT);
         $this->ldap->option(LDAP_OPT_NETWORK_TIMEOUT, $connection::TIMELIMIT);

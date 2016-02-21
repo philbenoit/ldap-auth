@@ -12,12 +12,21 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
 
     use Authorizable;
 
+    protected $authIdentifierName;
+
     /**
      * Most of the ldap user's attributes.
      *
      * @var array
      */
     protected $attributes;
+
+    public function __construct()
+    {
+        $options = $this->getLdapConfig();
+
+        $this->authIdentifierName = $options['authIdentifierName'];
+    }
 
 
     /**
@@ -40,7 +49,7 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
      */
     public function getAuthIdentifierName()
     {
-        return 'samaccountname';
+        return $this->authIdentifierName;
     }
 
 
@@ -149,7 +158,7 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
     private function buildAttributesFromLdap($entry)
     {
         $this->attributes['display_name']   = $entry['displayname'][0];
-        $this->attributes['samaccountname'] = $entry['samaccountname'][0];
+        $this->attributes[$this->authIdentifierName] = $entry[$this->authIdentifierName][0];
         $this->attributes['dn']             = $entry['dn'];
         $this->attributes['member_of']      = $entry['memberof'];
 
@@ -174,6 +183,15 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
         }
 
         return false;
+    }
+
+    private function getLdapConfig()
+    {
+        if( is_array($this->app['config']['ldap']) ){
+            return $this->app['config']['ldap'];
+        }
+
+        throw new MissingConfigurationException();
     }
 
 }
