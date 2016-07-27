@@ -19,18 +19,6 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
      */
     protected $attributes;
 
-        protected $authIdentifierName;
-
-            public function __construct()
-    {
-        $options = $this->getLdapConfig();
-
-        $this->authIdentifierName = $options['authIdentifierName'];
-    }
-
-
-
-
     /**
      * Build an LdapUser object from the LDAP entry
      *
@@ -161,8 +149,9 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
     private function buildAttributesFromLdap($entry)
     {
 
+        $this->attributes['id']      = $entry['id'][0];
         $this->attributes['display_name']      = $entry['displayname'][0];
-        $this->attributes[$this->authIdentifierName] = $entry[$this->authIdentifierName][0];
+        $this->attributes['userprinciplename'] = $entry['userprinciplename'][0];
         $this->attributes['dn']                = $entry['dn'];
         $this->attributes['member_of']         = $entry['memberof'];
 
@@ -189,15 +178,5 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
 
         return false;
     }
-
-        private function getLdapConfig()
-    {
-        if( is_array($this->app['config']['ldap']) ){
-            return $this->app['config']['ldap'];
-        }
-
-        throw new MissingConfigurationException();
-    }
-
 
 }
