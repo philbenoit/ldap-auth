@@ -84,10 +84,10 @@ class LdapAuthUserProvider implements UserProvider
         if( !is_null($result) ){
 
             // Set the new user into the DB
-            // $user = User::firstOrNew(['email' => $username]);
-            // $user->display_name = $result['displayname'][0];
-            // $user->email = $result['userprincipalname'][0];
-            // $user->save();
+            $user = User::firstOrNew(['email' => $username]);
+            $user->display_name = $result['displayname'][0];
+            $user->email = $result['userprincipalname'][0];
+            $user->save();
             
             // Get the users groups and add the connection to the DB
             // for each $result['memberof'] we check if the group exists in the DB

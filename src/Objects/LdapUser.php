@@ -39,7 +39,7 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
      */
     public function getAuthIdentifierName()
     {
-                return $this->authIdentifierName;
+        return 'userprincipalname';
 
     }
 
@@ -149,9 +149,9 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
     private function buildAttributesFromLdap($entry)
     {
 
-        $this->attributes['id']      = $entry['id'][0];
+        $this->attributes['id']      = $entry['id'];
         $this->attributes['display_name']      = $entry['displayname'][0];
-        $this->attributes['userprinciplename'] = $entry['userprinciplename'][0];
+        $this->attributes['userprincipalname'] = $entry['userprincipalname'][0];
         $this->attributes['dn']                = $entry['dn'];
         $this->attributes['member_of']         = $entry['memberof'];
 
