@@ -74,6 +74,7 @@ class Ldap {
 
         // Build Common Name from Config file and append to base DN
         $this->admin_user = 'CN=' . $this->admin_user . ',' . $this->base_dn;
+        // $this->admin_user = $this->admin_user;
 
         $this->ldap = new LdapConnection($config);
         $this->connect($this->ldap);
@@ -92,7 +93,8 @@ class Ldap {
         $this->ldap->connect();
 
         $this->ldap->option(LDAP_OPT_PROTOCOL_VERSION, $connection::VERSION);
-        $this->ldap->option(LDAP_OPT_REFERRALS, $connection::REFERRALS);
+        // $this->ldap->option(LDAP_OPT_REFERRALS, $connection::REFERRALS);
+        $this->ldap->option(LDAP_OPT_REFERRALS, 0);
         $this->ldap->option(LDAP_OPT_TIMELIMIT, $connection::TIMELIMIT);
         $this->ldap->option(LDAP_OPT_NETWORK_TIMEOUT, $connection::TIMELIMIT);
 

@@ -34,10 +34,6 @@ class LdapAuthServiceProvider extends ServiceProvider
                 $ldap, $app['config']['auth']['providers']['ldap-users']['model']
             );
         });
-
-        $this->publishes([
-            __DIR__.'/Config/ldap.php' => config_path('ldap.php'),
-        ]);
     }
 
     /**

@@ -12,8 +12,6 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
 
     use Authorizable;
 
-    protected $authIdentifierName;
-
     /**
      * Most of the ldap user's attributes.
      *
@@ -21,12 +19,16 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
      */
     protected $attributes;
 
-    public function __construct()
+        protected $authIdentifierName;
+
+            public function __construct()
     {
         $options = $this->getLdapConfig();
 
         $this->authIdentifierName = $options['authIdentifierName'];
     }
+
+
 
 
     /**
@@ -49,7 +51,8 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
      */
     public function getAuthIdentifierName()
     {
-        return $this->authIdentifierName;
+                return $this->authIdentifierName;
+
     }
 
 
@@ -157,10 +160,11 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
      */
     private function buildAttributesFromLdap($entry)
     {
-        $this->attributes['display_name']   = $entry['displayname'][0];
+
+        $this->attributes['display_name']      = $entry['displayname'][0];
         $this->attributes[$this->authIdentifierName] = $entry[$this->authIdentifierName][0];
-        $this->attributes['dn']             = $entry['dn'];
-        $this->attributes['member_of']      = $entry['memberof'];
+        $this->attributes['dn']                = $entry['dn'];
+        $this->attributes['member_of']         = $entry['memberof'];
 
         // Just for readability, unsetting count as we only fetch one user
         unset( $this->attributes['member_of']['count'] );
@@ -176,6 +180,7 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
      */
     public function isMemberOf($group)
     {
+
         foreach ($this->attributes['member_of'] as $groups) {
             if (preg_match('/^CN=' . $group . '/', $groups)) {
                 return true;
@@ -185,7 +190,7 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
         return false;
     }
 
-    private function getLdapConfig()
+        private function getLdapConfig()
     {
         if( is_array($this->app['config']['ldap']) ){
             return $this->app['config']['ldap'];
@@ -193,5 +198,6 @@ class LdapUser implements UserContract, AuthorizableContract, LdapUserContract
 
         throw new MissingConfigurationException();
     }
+
 
 }

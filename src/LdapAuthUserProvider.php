@@ -2,13 +2,12 @@
 
 namespace Krenor\LdapAuth;
 
+use WWF\User;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class LdapAuthUserProvider implements UserProvider
 {
-
-
     /**
      * LDAP Object
      *
@@ -78,14 +77,28 @@ class LdapAuthUserProvider implements UserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
+
         $username = $credentials['username'];
         $result = $this->ldap->find($username);
 
         if( !is_null($result) ){
-            $user = new $this->model;
-            $user->build( $result );
 
-            return $user;
+            // Set the new user into the DB
+            // $user = User::firstOrNew(['email' => $username]);
+            // $user->display_name = $result['displayname'][0];
+            // $user->email = $result['userprincipalname'][0];
+            // $user->save();
+            
+            // Get the users groups and add the connection to the DB
+            // for each $result['memberof'] we check if the group exists in the DB
+            // If not we create it 
+            // then we add the users ID and the group ID to the group_users table
+
+            $ldap_user = new $this->model;
+            $result['id'] = $user->id;
+            $ldap_user->build( $result );
+
+            return $ldap_user;
         }
 
         return null;
